@@ -1,0 +1,38 @@
+Data storage challenges:
+    - Sharing of data by containers in a Pod 
+    - Sharing of data by Pods
+    - Persisting data beyond life-cycle of a Pod 
+
+Tasks:
+    - Need to find a way to share the storage among different containers in the same pod
+
+
+VOLUMES:
+    (1) Ephemeral VOLUMES:    
+        - volume lifetime is the same as that of the pod that uses it
+        - if a container restarts, the same Volume will be used by the new container 
+        - once a pod terminates or is restarted, the Volume ceases to exist
+    (2) Persistent Volumes: 
+        - PV solves the problem associated with Volumes
+
+
+How to Use Volume:
+
+    (1) .spec.volumes field defines the Volumes this pod is planning to use
+    (2) .spec.containers.volumeMounts defines where to mount those Volumes in individual containers
+
+
+Types of Volumes:
+    - k8s supports several types of volumes 
+    - availability often depends on your cloud provider 
+    - AWS, GCP, Azure and etc. support different types of volumes 
+    - Common types of Volumes:
+        (1) EmptyDir:
+            - An empty directory that's created when a pod is assigned to a node
+            - Only exists as long as the pod does
+            - Containers in a pod can write and read files from this directory
+            - Same emptyDir Volume can be mounted on different paths for different containers 
+
+        (2) Hostpath:
+            - Used to mount a file or a directory from the host node's filesystem to a pod
+        

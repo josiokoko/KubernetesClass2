@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: shared-volume
+  labels:
+    app: logs
+spec:
+  volumes:
+    - name: test-volume
+      hostPath:
+        path: /tmp
+        type: DirectoryOrCreate # Directory; File; FileOrCreate; BlockDevice
+  containers:
+    - name: precious-app
+      image: busybox
+      command: ['sh']
+      args: ['-c', "while true; do date >> /var/log/date.txt; sleep 5; done"]
+      volumeMounts:
+        - name: test-volume
+          mountPath: /var/log
+    - name: sidecar
+      image: centos/httpd
+      ports:
+        - containerPort: 80
+      volumeMounts:
+        - name: test-volume
+          mountPath: /var/www/html
+    - name: redis
+      image: redis
+      volumeMounts:
+        - name: test-volume
+          mountPath: /data

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: configured-pod
+  labels:
+    name: configured-pod
+spec:
+  volumes:
+    - name: configvol
+      configMap:
+        name: testconfig
+  containers:
+  - name: configured-pod
+    image: nginx:alpine
+    volumeMounts:
+      - name: configvol
+        mountPath: /chineyere

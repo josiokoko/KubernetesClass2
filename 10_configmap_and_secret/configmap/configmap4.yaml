@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ip-configmap
+  namespace: default
+data:
+  PORT: "8009"
+  IP_ADDRESS: "172.0.2.1"

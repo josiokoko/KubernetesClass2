@@ -1,0 +1,21 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: standard
+provisioner: kubernetes.io/aws-ebs
+parameters: # Depends on the provisioner (e.g. AWS EBS provisioner accepts type io1, gp2, sc1, st1)
+  type: gp2
+reclaimPolicy: Delete # Retain, Recylce
+allowVolumeExpansion: true
+volumeBindingMode: waithForFirstConsumer # Immediate
+
+--- 
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: slow
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: io1
+  iopsPerGB: "10"
+  fsType: ext4

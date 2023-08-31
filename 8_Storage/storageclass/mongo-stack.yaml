@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: new-mongodb
+spec:
+  selector:
+    matchLabels:
+      app: mongodb-class
+  replicas: 1
+  template: # template for the pods
+    metadata:
+      labels:
+        app: mongodb-class
+    spec:
+      containers:
+      - name: mongodb
+        image: mongo:3.6.5-jessie
+        volumeMounts:
+          - name: mongo-storage-class
+            mountPath: /data/db
+      volumes:
+        - name: mongo-storage-class
+          # pointer to the configuration of HOW we want the mount to be implemented
+          persistentVolumeClaim:
+            claimName: new-mongo-pvc
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: fleetman-mongodb-class
+spec:
+  selector:
+    app: mongodb-class
+  ports:
+    - name: mongoport
+      port: 27017
+  type: ClusterIP

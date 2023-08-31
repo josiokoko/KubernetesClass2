@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: test-config
+data:
+  test-conf: |
+    env = staging
+    endpoint=0.0.0.0:8080
+    char = utf8
+    logsize = 2GB

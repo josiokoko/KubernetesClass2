@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: jen-deploy
+  labels:
+    app: jen-deploy 
+spec: 
+  replicas: 3
+  strategy: # Canary deployment; blue/green deployment
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: new
+      env: prod 
+  template:
+    metadata:  
+      name: new-pod
+      labels:
+        app: new
+        env: prod     
+    spec:
+      containers:
+      - name: new-pods-container
+        image: jenkins/jenkins:jdk11
+        ports:
+        - containerPort: 8080

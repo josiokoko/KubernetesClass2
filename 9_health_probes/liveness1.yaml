@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod  
+metadata:
+  name: liveliness-probe-with-restart-policy
+spec:
+  restartPolicy: Never
+  containers:
+  - name: liveliness-probe-container
+    image: ubuntu
+    command:
+    - /bin/bash
+    - -ec
+    - touch /tmp/live; sleep 30; rm /tmp/live; sleep 600
+    livenessProbe:
+      exec:
+        command:
+          - cat
+          - /tmp/live
+      initialDelaySeconds: 10
+      periodSeconds: 10
+    readinessProbe:
+      exec:
+        command:
+          - cat
+          - /tmp/live
+      initialDelaySeconds: 10
+      periodSeconds: 10

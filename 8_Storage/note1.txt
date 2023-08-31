@@ -1,0 +1,74 @@
+Storage in Kubernetes
+	- Sharing of data by containers in a Pod
+	- Sharing of data by Pods 
+	- Persisting data beyond the life cycle of a Pod
+
+Volumes:
+	(1) Ephemeral Volumes:
+		- volume life cycle = the Pod life cycle
+		- If a container restarts, the new container will have access to the same volume
+		- Once Pod terminates, the volume is gone!
+
+	(2) Persistent Volume 
+		- Solves the challenges with ephemeral volume
+
+Type of Volumes:
+	(1) emtyDir()
+		- an empty directory that is created when a Pod is assigned to a node
+		- Only exists as long as the Pod exits
+		- Containers can write to and read from it 
+		- the same emptyDir() volume can be mounted on different path for different containers
+
+	(11) hostPath:
+		- Use to mount file or a directory from the host node's filesystem to a Pod
+
+	(111) Persistent Volume:
+		- k8s object for users and administrators
+		- abstracts details of how storage is provided from how it is consumed
+		- There are 2 resource type provided by k8s:
+			(1) PersistentVolume
+			- a piece of storage in the cluster
+			- like storage, PV are volume plugins
+			- a resource in the cluster like any other objects
+			(2) PersistentVolumeClaim
+	
+Creating PV:
+- Static PV
+	- PersistentVolume object
+	- PersistentVolumeClaim object
+	- Create volumes and volumeMounts
+
+- Dynamic PV (Using Storage Class)
+	- Storage Class
+	- PersistentVolumeClaim object
+	- Create volumes and volumeMount
+		
+
+
+Scenario (Logging):
+	- Two apps
+		- busybox app and outputting date log every 5 seconds
+		- httpd app storing the date log
+	
+	- Create a multi-container Pod running the two apps.
+
+		shared-emptydir-volume.yaml
+
+
+export NAME=onyxquity-new-kops.k8s.local
+export KOPS_STATE_STORE=s3://kops-8yr6s4ebhin9t
+export AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id)
+export AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key)
+
+kops delete cluster --name ${NAME} --yes
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,28 @@
+### Step 1: Encode PostgreSQL admin username and password using base64
+    Linux
+        # Encode a string to base64
+            echo  'admin' | base64
+       
+        # Decode our base64 string
+            echo 'YQBkAG0AaQBuAA==' | base64 --decode
+
+    Windows PowerShell
+        # Encode a string
+            $MYTEXT = 'admin'
+            $ENCODED = [Convert]::ToBase64String([Text.Encoding]::Unicode.GetBytes($MYTEXT))
+            Write-Output $ENCODED
+
+        # Decode a string
+            $MYTEXT = 'YQBkAG0AaQBuAA=='
+            $DECODED = [System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String($MYTEXT))
+            Write-Output $DECODED
+
+    Python
+        # Encoding a string
+            import base64
+            encoded = base64.b64encode(b'admin')
+            encoded
+
+        # Decoding
+            decoded = base64.b64decode(b'dGhlZGV2b3BzbGlmZS5jb20=')
+            decoded

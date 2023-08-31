@@ -1,0 +1,108 @@
+Pods
+- atomic unit deployment
+
+2 ways to deployment
+(1) static Pod : create Pod directly
+(2) Use controller objects (e.g ReplicaSet; Deployment etc)
+
+
+# Create a Pod with kubectl
+(1) Imperative CLI 
+(2) Declarative approach
+
+Imperative approach
+	# Create a static Pod
+		kubectl run <pod name> --image=<image name>
+		kubectl run my-nginx --image=nginx:alpine
+
+	# List/Get running Pods
+
+		kubectl get pods
+		kubectl get po
+
+		Additional flags:
+			-o yaml 
+			-o json 
+			-o wide
+	
+	# Examine Pod detail
+
+		kubectl describe po my-nginx 
+	
+	# Delete a Pod
+		kubectl delete pod my-nginx2
+
+
+Declarative approach
+
+	# pod1.yaml (configuration file/manifest)
+
+		apiVersion: v1
+		kind: Pod
+		metadata:
+			name: my-nginx3
+		spec:
+			containers:
+			- name: Nginx
+			image: nginx:alpine
+			ports:
+				- containerPort: 80
+	
+	# Create a Pod
+
+		kubectl apply -f pod1.yaml
+		kubectl create -f pod1.yaml
+
+Hybrid approach 
+
+	kubectl run my-nginx4 --image=nginx:alpine --dry-run=client -o yaml > pod3.yaml
+
+
+# Delete a Pod
+	(1) By name
+		kubectl delete pod my-nginx2
+
+	(2) yaml used to create a Pod
+
+		kubectl delete -f pod3.yaml
+	
+	(3) kubectl delete all --all
+
+# Check logs
+	kubectl logs <pod name>
+
+# Run commands in Pods 
+	kubectl exec <pod name> -- sh (single command)
+	kubectl exec -it <pod name> -- sh (long running command)
+
+# Explain
+
+kubectl explain pods
+
+kubectl explain pods.metadata
+kubectl explain pods.spec
+
+kubectl api-resources
+
+
+# Multi-container Pods 
+	- Init containers
+	- Sidecar containers
+	- Adapter containers 
+	- Ambassador containers 
+
+logs
+	kubectl logs <pod name>
+	kubectl logs <pod name> --container <container name>
+	kubectl logs <pod name> -c <container name>
+
+
+Workloads
+	- Pods
+
+	Controllers: control/supervise Pod deployment 
+	- ReplicaSet
+	- Deployments
+	- StatefulSet 
+	- Jobs and CronJobs
+	- DaemonSet

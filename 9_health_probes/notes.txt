@@ -1,0 +1,45 @@
+Types of Probes: Health Check
+    - Liveness Probe 
+		- liveness probes to detect and remedy such situations
+
+    - Readiness Probe 
+	- Startup Probe
+
+Implementation of Probes:
+    - exec command:
+
+		livenessProbe:
+            exec:
+                command:
+                - cat
+                - /tmp/health
+            initialDelaySeconds:
+            periodSeconds: 15
+            failureThreshold: 3
+
+		readinessProbe:
+            exec:
+                command:
+                - cat
+                - /tmp/health
+            initialDelaySeconds:
+            periodSeconds: 15
+            failureThreshold: 3
+
+	- httpGet:
+        livenessProbe:
+            httpGet:
+                path: /health-check
+                port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            failureThreshold: 3
+        readinessProbe:
+            httpGet:
+                path: /health-check
+                port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            failureThreshold: 3
+
+	- tcpSocket

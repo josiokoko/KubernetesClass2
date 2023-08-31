@@ -1,0 +1,75 @@
+Labels and Annotations
+
+Labels
+=======
+- key/value pairs
+- Add metadata to K8s
+- Identifiable info about an object
+- 63 characters
+
+Use cases
+=========
+- Organize and group k8s object
+- Filter objects
+- target specific Pods
+- subset objects 
+
+Label Syntax
+
+...
+...
+metadata:
+	name: test-pod
+	labels:
+		key1: value1
+		key2: value2
+		key3: value3
+...
+...
+
+
+Shows labels
+	kubectl get pod pod-with-labels --show-labels
+
+
+Label Selectors:
+	- Equality-based selectors (=, == , !=)
+	- Set-based selectors (in, notin, exits)
+
+Example
+Create two redis pods i.e. redis-prod and redis-staging
+
+	kubectl run redis-prod --image=redis:alpine --labels="version=v1,app=redis,environment=prod"
+	kubectl run redis-staging --image=redis:alpine --labels="version=v2,app=redis,environment=stagging"
+
+
+Create two nginx Pods i.e. nginx-prod and nginx-testCreate two nginx deployments i.e. nginx-prod and nginx-test
+	kubectl run nginx-prod --image=nginx:alpine --labels="version=v2,app=nginx,environment=prod"
+	kubectl run nginx-test --image=nginx:alpine --labels="version=v2,app=nginx,environment=test"
+
+	kubectl get pods -l 'app notin (nginx,redis)' --show-labels
+	kubectl get pods -l 'app notin (nginx,redis)' --show-labels
+
+	   kubectl get pods --show-labels
+  kubectl get po -l version=v2
+   kubectl get po -l version=v2 --show-labels
+   kubectl get po -l environment!=prod
+   kubectl get po -l environment!=prod --show-labels
+  kubectl get pods nginx-server -o yaml
+  kubectl get po -l environment!=prod --show-labels
+  kubectl label pod nginx-server app=nginx
+  kubectl get po -l environment!=prod --show-labels
+  kubectl get pod -l app=nginx
+  kubectl get pod -l app=nginx --show-labels
+  kubectl get pods -l 'app in (nginx,redis)'
+  kubectl get pods -l 'app in (nginx,redis)' --show-labels
+  kubectl get pods -l 'app notin (nginx,redis)' --show-labels
+  kubectl get pods -l 'app in (nginx,redis), environment notin (prod)'
+
+
+Annotations:
+	- key/value pairs 
+	- cannot use annotation for filtering or grouping
+	- Provide additional info (commit SHA, issue tracking. timestamps, names/informtion)
+	- Details about libraries, depencies, tools
+	- The rule is much more relaxed.

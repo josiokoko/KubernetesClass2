@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: build-bot
+  name: build-bot
+  namespace: devops
+spec:
+  serviceAccountName: scrap-bot-0
+  containers:
+  - image: redis
+    name: build-bot
+

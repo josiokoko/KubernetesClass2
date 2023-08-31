@@ -1,0 +1,52 @@
+Communication with k8s object
+
+k8s API Server
+- Authentication
+- Authorization
+- Admission control
+
+
+Granting Access based on roles:
+	Role Based Access Control (RBAC)
+
+API Access:
+	external access (kubectl commands):
+	- k8s has no object for managing external access
+		- users
+		- groups
+	
+	Internal access (Helm, Jenkins)
+		- Service Account
+		- manages by k8s 
+
+Create a Service Account
+
+	kubectl create serviceaccount build-bot
+
+
+RBAC:
+	Subject => user or serviceaccount that want access 
+	Resource => API resources / k8s Object 
+		Deployment, Pod, Node
+	Verbs: => operations that the Subject wants
+		create, list, delete, update, watch ...
+		CRUD
+
+Create a Subject
+	
+	Service Account
+		kubectl create serviceaccount build-bot
+
+Assign the serviceaccount to a pod
+
+Create Role or ClusterRole
+
+Create RoleBinding or ClusterRoleBinding
+
+rules:
+- apiGroups: ["apps"]
+  #
+  # at the HTTP level, the name of the resource for accessing Deployment
+  # objects is "deployments"
+  resources: ["deployments"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete", "edit", "apply"]

@@ -1,0 +1,17 @@
+Description:
+    The queue used by Fleetman vehicles to report their positions.
+    Implement as a simple ActiveMQ endpoint
+
+    Docker Image:
+        richardchesterwood/k8s-fleetman-queue:release1 
+
+    Port 8161 is the admin console (admin/admin as user/password combination)
+    Expose this to a browser using port 30010
+
+
+Solution
+    To run: 
+        docker container run -d --network fleetman -p 8161:8161 richardchesterwood/k8s-fleetman-queue:release1
+    
+    The port mapping is only neccessary if you want to peek at the queue. 
+    It is not secure (user/pass ==> admin/admin)

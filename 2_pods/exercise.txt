@@ -1,0 +1,12 @@
+Activity 1: Complete the following exercise:
+
+1. Create a YAML manifest for a Pod named complex-pod. The main application container named app should use the image nginx and expose the container port 80. Modify the YAML manifest so that the Pod defines an init container named setup that uses the image busybox. The init container runs the command wget -O- google.com.
+2. Create the Pod from the YAML manifest.
+3. Download the logs of the init container. You should see the output of the wget command.
+4. Open an interactive shell to the main application container and run the ls command. Exit out of the container.
+5. Force-delete the Pod.
+6. Create a YAML manifest for a Pod named data-exchange. The main application container named main-app should use the image busybox. The container runs a command that writes a new file every 30 seconds in an infinite loop in the directory /var/app/data. The filename follows the pattern {counter++}-data.txt. The variable counter is incremented every interval and starts with the value 1.
+7. Modify the YAML manifest by adding a sidecar container named sidecar. The sidecar container uses the image busybox and runs a command that counts the number of files produced by the main-app container every 60 seconds in an infinite loop. The command writes the number of files to standard output.
+8. Define a Volume of type emptyDir. Mount the path /var/app/data for both containers.
+9. Create the Pod. Tail the logs of the sidecar container.
+10. Delete the Pod.

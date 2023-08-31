@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: init-app2
+spec:
+  initContainers:
+  - name: init-service
+    image: busybox:latest
+    command: ['sh', '-c', 'echo waiting service; sleep 120;']
+  - name: init-db
+    image: busybox:latest
+    command: ['sh', '-c', 'echo waiting on db; sleep 120;']
+  containers:
+  - name: main
+    image: busybox:latest
+    command: ['sh', '-c', 'echo The melonapp is running! && sleep 3600']

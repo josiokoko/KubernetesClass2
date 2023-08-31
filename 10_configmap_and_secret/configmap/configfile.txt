@@ -1,0 +1,3 @@
+PS C:\Users\lucya\Desktop\workshop\kubernetes-workshop-notes\service_ingress>
+PS C:\Users\lucya\Desktop\workshop\kubernetes-workshop-notes\service_ingress>
+PS C:\Users\lucya\Desktop\workshop\kubernetes-workshop-notes\service_ingress>

@@ -1,0 +1,33 @@
+Service
+	- k8s object
+	- Provide access to our Workloads
+	- provides stable IP, stable DNS and stabe Port 
+Type of Service:
+	ClusterIP 
+		- Internal access
+	NodePort 
+		- Built on ClusterIP
+		- Allows external traffic
+	LoabBalancer:
+		- Built on NodePort 
+		- External traffic 
+		- Supported by cloud providers 
+
+Create Service object
+
+	(1) Imperative
+	 		kubectl expose --help
+			kubectl expose deployment hello-deploy --port=80 --type=LoadBalancer
+
+			kubectl expose deployment hello-deploy --port=80 --type=NodePort
+
+			nodeport = 30879
+
+			IP of Nodes:
+				3.239.104.214:30879
+				54.92.200.50:30879
+				34.230.74.51:30879
+
+				54.89.96.39
+
+	(11) Declarative

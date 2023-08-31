@@ -1,0 +1,24 @@
+ABC company:
+	- 1 k8s cluster
+	- Teams:
+		- Finance
+		- operations
+		- IT
+	- Namespace:
+		- partitioning
+		- Loose isolation
+		- apply quotas and policies to group objects
+	
+	kubectl get namespace
+	kubectl get ns
+
+Create Namespace
+
+	(1) Imperatively
+
+		kubectl create ns accounting-ns
+		kubectl run nginx-app --image=nginx:alpine --namespace accounting-ns
+		kubectl run nginx-app --image=nginx:alpine -n accounting-ns
+
+
+	(2) Declaratively using YAML

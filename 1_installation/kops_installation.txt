@@ -1,0 +1,177 @@
+Check aws version
+    which aws
+    aws --version
+
+    aws s3 ls
+
+Check kubectl
+    kubectl version --client 
+
+    Install kubectl (Cube Cuttle)
+
+kOp Installation
+    Windows¶
+        Get kops-windows-amd64 from our releases.
+        Rename kops-windows-amd64 to kops.exe and store it in a preferred path.
+        Make sure the path you chose is added to your Path environment variable.
+
+Install kOps on aws
+
+Step 2: Dedicated IAM User for kops & add some permissions to the kOp IAM user
+
+    # Create IAM group
+
+    aws iam create-group --group-name kops;
+
+    # Attach permissions to the group
+        AmazonEC2FullAccess
+        AmazonRoute53FullAccess
+        AmazonS3FullAccess
+        IAMFullAccess
+        AmazonVPCFullAccess
+        AmazonSQSFullAccess
+        AmazonEventBridgeFullAccess
+
+        # Attach AmazonEC2FullAccess Permission
+        aws iam attach-group-policy --policy-arn arn:aws:iam::aws:policy/AmazonEC2FullAccess --group-name kops;
+        # Attach AmazonRoute53FullAccess Permission
+        aws iam attach-group-policy --policy-arn arn:aws:iam::aws:policy/AmazonRoute53FullAccess --group-name kops;
+        # Attach AmazonS3FullAccess Permission
+        aws iam attach-group-policy --policy-arn arn:aws:iam::aws:policy/AmazonS3FullAccess --group-name kops;
+        # Attach IAMFullAccess Permission
+
+        aws iam attach-group-policy --policy-arn arn:aws:iam::aws:policy/IAMFullAccess --group-name kops;
+        # Attach AmazonVPCFullAccess Permission
+        aws iam attach-group-policy --policy-arn arn:aws:iam::aws:policy/AmazonVPCFullAccess --group-name kops;
+        # Attach AmazonSQSFullAccess Permission
+        aws iam attach-group-policy --policy-arn arn:aws:iam::aws:policy/AmazonSQSFullAccess --group-name kops;
+        # Attach AmazonEventBridgeFullAccess Permission
+        aws iam attach-group-policy --policy-arn arn:aws:iam::aws:policy/AmazonEventBridgeFullAccess --group-name kops;
+    
+    # Create an IAM user
+    aws iam create-user --user-name kops;
+
+
+    # Attach user to the group
+    aws iam add-user-to-group --user-name kops --group-name kops;
+
+
+    # aws iam create-access-key --user-name kops;
+    aws configure
+
+    aws sts get-caller-identity
+
+Step 3: export my access key Id and secret access key as environment variables
+
+    MacOS/Linux
+        export AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id)
+        export AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key)
+
+    
+    Windows
+        set AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id)
+        set AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key)
+
+Step 4: Create s3 bucket to store info about our k8s cluster
+    # Generate a unique random name to be used for aws bucket
+    export BUCKET_NAME="kops-$(LC_ALL=C tr -dc 'a-z0-9' </dev/urandom | head -c 13 ; echo)" && echo $BUCKET_NAME
+
+    # Create S3 bucket
+    aws s3api create-bucket --bucket $BUCKET_NAME --region us-east-1
+
+
+    # export BUCKET_NAME=my-august-6-random-joe-bucket
+
+    aws s3api create-bucket --bucket $BUCKET_NAME --region us-east-1
+
+        # Enable versioning
+        aws s3api put-bucket-versioning --bucket $BUCKET_NAME --versioning-configuration Status=Enabled
+
+        aws s3 ls
+
+
+Step 5: Export/set KOPS_STATE_STORE and NAME variables 
+        as environmental variables to avoid having to 
+        enter long variable names everytime you run kops command:
+
+        # Store your cluster name and s3 bucket in environment variables
+        export NAME=onyxquity-pi.k8s.local
+        export KOPS_STATE_STORE=s3://$BUCKET_NAME
+        
+        
+        # export KOPS_STATE_STORE=s3://kops-8yr6s4ebhin9t
+
+
+    
+
+    
+    5b: Generate ssh private and public key using ssh-keygen
+
+        ssh-keygen
+
+Step 6: Next, create Kubernetes cluster in the specified availability zones:
+
+    kops create cluster --name ${NAME} \
+        --cloud=aws --networking calico \
+        --zones us-east-1a,us-east-1b,us-east-1c \
+        --master-size t2.medium --node-size t2.medium \
+        --node-count=3 --master-count=1 
+
+
+Step 7: Add public SSH key to master and worker nodes:
+
+    kops create secret --name $NAME sshpublickey admin -i ~/.ssh/id_rsa.pub
+
+
+Step 8: Build and validate cluster:
+    
+    # Build cluster
+    kops update cluster --name ${NAME} --yes --admin
+
+    # Validation cluster
+    kops validate cluster --name ${NAME} --wait 10m
+
+
+k8s components:
+
+    kubectl get pods --namespace kube-system
+
+
+Deploy simple Nginx
+
+    # Deploy
+    kubectl create deployment my-nginx --image=nginx:alpine --replicas=3 --port=80
+
+    # Expose 
+    kubectl expose deployment my-nginx --port=80 --type=LoadBalancer
+
+    # Check the deployment
+    kubectl get deployments
+
+    # Check Pods
+    kubectl get pods 
+
+    # Check service
+    kubectl get svc myapp
+
+
+Step 10: Delete the demo resources and Kubernetes cluster:
+
+    # Delete workload
+    kubectl delete deployment my-nginx
+    kubectl delete svc my-nginx    
+
+    # Delete kOps cluster
+    kops delete cluster --name ${NAME} --yes
+
+
+
+Interaction with API server
+
+    KUBECONFIG file
+    - configuration file
+
+    cat $HOME/.kube/config
+
+
+    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

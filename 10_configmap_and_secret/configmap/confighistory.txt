@@ -1,0 +1,8 @@
+
+   24  kubectl get deploy
+   25  kubectl get po
+   26  kubectl scale deployment app-cache --replicas=1
+   27  kubectl get deploy
+   28  kubectl scale deployment app-cache --replicas=5
+   29  kubectl get deploy
+   30  kubectl get deployment app-cache -o yaml > app-cache-scaled.yaml

@@ -1,0 +1,97 @@
+Workloads
+	- Pods
+
+Controllers: control/supervise Pod deployment 
+	- ReplicaSet
+	- Deployments => (abstract ReplicaSet) => (Abstract Pods)
+	- StatefulSet 
+	- Jobs and CronJobs
+	- DaemonSet
+
+Deployments
+===========
+- Never run static Pod
+
+Why?
+- Scalability issue
+- Failure tolerance (cannot self-heal, cannot be rescheduled by itself)
+
+
+Create Deployment:
+
+(1) Imperative
+
+	kubectl create --help
+	kubectl create deployment nginx-deploy --image=nginx:alpine --replicas=3
+
+
+(2) Declarative 
+
+Live edit edits
+	kubectl edit deploy nginx-deploy
+
+Delete deployment
+	kubectl delete deployment <object name>
+	kubectl delete -f deploy1.yaml
+
+Rolling Update
+	development version => nginx
+	testing version => nginx:alpine
+	staging version => nginx:1.25.1
+
+	No downtime
+
+	Imperatively
+		kubectl set image deployment first-deploy new-pods-container=nginx:alpine --record
+	10 => 5 (5 Pods left)
+	10 => 4 new Pods
+
+	Declaratively:
+		update your YAML file 
+		apply the YAML 
+
+	Checking Rollout Status 	
+		kubectl rollout status deployment first-deploy
+	
+	History of deployment
+		kubectl rollout history deployment first-deploy
+		kubectl rollout history deployment first-deploy --revision=3
+
+Rollback
+	revert back to previous state or revision
+	--to-revision=<revision number>
+
+	kubectl rollout undo deployment first-deploy --to-revision=2
+
+
+
+Scaling Workloads:
+	Ways:
+		(1) Manually
+			Imperative => 
+				kubectl scale deploy first-deploy --replicas=2
+				kubectl scale deploy first-deploy --replicas=5
+
+			Declarative =>
+				Update replicas in your YAML file 
+				Then, apply the YAML file again
+
+		(2) Autoscaling (Horizontal Pod Autoscaling => HPA):
+			(1) Imperatively
+					kubectl autoscale deployment first-deploy --cpu-percent=50 --min=5 --max=10
+			(11) Declaratively
+					hpa.yaml 
+
+Deployment strategies
+	- Recreate Strategy
+	- RollingUpdate Strategy
+
+Service:
+	ClusterIP
+	NodePort
+	LoabBalancer
+
+Ingress
+
+
+
